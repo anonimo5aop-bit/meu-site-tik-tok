@@ -1,0 +1,66 @@
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+const { WebcastPushConnection } = require("tiktok-live-connector");
+
+const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+const TIKTOK_USER = process.env.TIKTOK_USER;
+
+let placar = {
+  lula: 0,
+  flavio: 0
+};
+
+app.get("/", (req, res) => {
+  res.send("Servidor do Placar da Live está funcionando!");
+});
+
+app.get("/placar", (req, res) => {
+  res.json(placar);
+});
+
+io.on("connection", (socket) => {
+  socket.emit("placar", placar);
+});
+
+if (TIKTOK_USER) {
+  const tiktok = new WebcastPushConnection(TIKTOK_USER);
+
+  tiktok.connect()
+    .then(() => {
+      console.log("Conectado à LIVE do TikTok:", TIKTOK_USER);
+    })
+    .catch((err) => {
+      console.error("Erro ao conectar à LIVE:", err);
+    });
+
+  tiktok.on("gift", (data) => {
+    const presente = (data.giftName || "").toLowerCase();
+    const quantidade = data.repeatCount || 1;
+
+    console.log("Presente recebido:", presente, quantidade);
+
+    if (presente.includes("rose")) {
+      placar.lula += quantidade;
+    }
+
+    if (presente.includes("white rose")) {
+      placar.flavio += quantidade;
+    }
+
+    io.emit("placar", placar);
+  });
+}
+
+server.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
