@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Placar da Live</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="live">● AO VIVO</div>
+      <h1>Placar da Live</h1>
+      <p>Presentes recebidos durante a transmissão</p>
+    </header>
+
+    <section class="score">
+      <article class="card lula">
+        <div class="rose">🌹</div>
+        <h2>Lula</h2>
+        <div class="number" id="lulaCount">0</div>
+        <div class="label">rosas vermelhas</div>
+        <div class="percent" id="lulaPct">0%</div>
+      </article>
+
+      <div class="versus">×</div>
+
+      <article class="card flavio">
+        <div class="rose white">🌹</div>
+        <h2>Flávio Bolsonaro</h2>
+        <div class="number" id="flavioCount">0</div>
+        <div class="label">rosas brancas</div>
+        <div class="percent" id="flavioPct">0%</div>
+      </article>
+    </section>
+
+    <section class="bar" aria-label="Percentuais">
+      <div id="lulaBar"></div>
+      <div id="flavioBar"></div>
+    </section>
+
+    <div class="total">Total de presentes contabilizados: <strong id="total">0</strong></div>
+
+    <section class="test">
+      <strong>Modo de teste</strong>
+      <span>Use estes botões enquanto a integração da live não estiver conectada.</span>
+      <div>
+        <button onclick="addPoint('lula')">+ 🌹 Lula</button>
+        <button onclick="addPoint('flavio')">+ 🤍 Flávio</button>
+        <button class="reset" onclick="resetScore()">Zerar</button>
+      </div>
+    </section>
+
+    <footer>
+      Enquete informal baseada em presentes enviados durante a live.
+      Não é pesquisa eleitoral, votação oficial ou resultado eleitoral.
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
